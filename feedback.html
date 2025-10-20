@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Зворотній зв’язок</title>
+</head>
+<body>
+
+<header>
+    <h1>Районна адміністрація м. Здолбунів</h1>
+</header>
+
+<main>
+    <form>
+        <fieldset style="width: 174px;">
+            <legend>Персональна інформація</legend>
+
+            <label><span><i>Прізвище та ім’я:</i></span><br>
+                <input type="text" name="fullname" required>
+            </label><br><br>
+
+            <label><span><i>E-mail:</i></span><br>
+                <input type="email" name="email" required>
+            </label><br><br>
+
+            <label><span><i>Вік:</i></span><br>
+                <input type="number" name="age" min="18" max="120">
+            </label><br><br>
+
+            <label><span><i>Освіта:</i></span><br>
+                <select name="education">
+                    <option>Повна</option>
+                    <option>Неповна</option>
+                    <option>Вища</option>
+                    <option>Професійна</option>
+                </select>
+            </label>
+        </fieldset>
+
+        <br>
+
+        <label><span><i>Мета зворотнього зв’язку:</i></span><br>
+            <select name="purpose">
+                <option>Співпраця</option>
+                <option>Скарга на порушення права власності</option>
+                <option>Пропозиція</option>
+                <option>Наявність помилки</option>
+            </select>
+        </label><br><br>
+
+        <label><span><i>Детально:</i></span><br>
+            <textarea name="details" rows="5" cols="40" maxlength="300"></textarea>
+        </label><br><br>
+
+        <label>
+            <input type="checkbox" required> Даю згоду на обробку інформації
+        </label><br><br>
+
+        <input type="submit" value="Відправити">
+        <input type="reset" value="Очистити">
+    </form>
+
+    <br>
+    <a href="main.html">Повернутись на головну</a>
+</main>
+
+</body>
+</html>
