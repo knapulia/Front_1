@@ -1,0 +1,69 @@
+/* === Сторінка Напрями діяльності === */
+body.activities-page {
+    font-family: Verdana, sans-serif;
+    margin: 0;
+    background-color: #fdfdfd;
+}
+
+/* Хедер фіксований зверху */
+header h1 {
+    background-color: rgb(145, 9, 30); /* колір за RGB */
+    color: white; /* колір за іменем */
+    padding: 15px;
+    position: fixed; /* значення 1 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    z-index: 1000;
+}
+
+/* Основний контент */
+main {
+    margin-top: 120px; /* щоб хедер не перекривав контент */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    justify-items: center;
+}
+
+/* Блоки напрямів діяльності */
+main h3 {
+    border-left: 10px solid #640016; 
+    border-top: 3px dotted #640016;
+    border-right: 3px dotted #640016;
+    border-bottom: 3px dotted #640016;
+    padding: 10px;
+    width: 60%;
+    background-color: #fff8f8;
+}
+
+/* Відокремлений текст */
+p.special-text {
+    font-style: italic;
+    font-weight: lighter;
+    font-size: 0.9em;
+}
+
+/* Зображення з hover */
+img {
+    transition: filter 0.3s;
+}
+
+img:hover {
+    filter: brightness(0.75);
+}
+
+/* Посилання: зелене спочатку, сіре після переходу */
+body.activities-page a:link {
+    color: darkgreen;   /* ще не відвідане */
+    text-decoration: none;
+}
+
+body.activities-page a:visited {
+    color: gray;        /* вже відвідане */
+}
+
+body.activities-page a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,63 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    background-color: #7a001f;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 30px;
+}
+
+form {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 15px;
+    padding: 20px;
+    border: 2px solid #640016;
+    border-radius: 10px;
+    background-color: white;
+    width: 350px;
+}
+
+fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1; /* <-- ЗМІНА: Додано 'flex-grow' (вимога 5) */
+}
+
+input[type="submit"] {
+    order: 2;
+    background-color: #7a001f;
+    color: white;
+    border: none;
+    padding: 10px;
+}
+
+input[type="reset"] {
+    order: 1;
+    background-color: #ccc;
+    border: none;
+    padding: 10px;
+}
+
+a {
+    align-self: center;
+    margin-top: 10px;
+}

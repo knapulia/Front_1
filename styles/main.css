@@ -1,0 +1,125 @@
+/* === Загальні стилі === */
+body {
+    font-family: Arial, sans-serif; /* селектор елементу */
+    margin: 0;
+    background-color: #f4f7f9; /* колір за HEX */
+}
+
+header h1#main-header { /* селектор id */
+    background-color: rgb(145, 9, 30); /* колір за RGB */
+    color: white; /* колір за іменем */
+    padding: 15px;
+    position: absolute; /* значення 1 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    z-index: 1000;
+}
+
+/* Навігація */
+nav {
+    margin-top: 125px;
+    background-color: #f5f0f0;
+    padding: 10px;
+    text-align: center;
+    position: sticky; /* <-- ЗМІНА 1: Додано 3-тє значення 'position' (вимога 4) */
+    top: 0;
+    z-index: 999; /* Щоб був під шапкою */
+}
+
+nav > a { /* <-- ЗМІНА 2: Додано комбінатор '>' (дитина) (вимога 3) */
+    text-decoration: none;
+    color: darkgreen;
+    padding: 5px 10px;
+}
+
+nav > a:hover { /* псевдоклас */
+    background-color: #c7e0cc;
+    border-radius: 5px;
+}
+
+/* Основний контент */
+main {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    gap: 20px;
+}
+
+article { /* селектор елементу */
+    width: 65%;
+    background-color: #ffffff;
+    padding: 15px;
+    border: 2px solid #b0b0b0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    overflow-y: auto; /* смуга прокрутки */
+    height: 350px;
+}
+
+article h2::before { /* псевдоелемент */
+    content: "☺";
+}
+
+/* Блок керівництва */
+aside { /* селектор елементу */
+    width: 30%;
+    background-color: #fafafa;
+    padding: 15px;
+    border: 1px solid #ccc;
+    text-align: center;
+    transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s; /* три властивості */
+}
+
+aside:hover { /* перехід на hover */
+    transform: scale(1.05);
+    background-color: #f0f0f0;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.contact-info {
+    display: inline-block;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px 10px;
+    /* ЗМІНА 3: 'transition' змінено, щоб рамка з'являлась
+       ЧЕРЕЗ 3 сек (delay), а не тривала 3 сек (duration) (вимога 4)
+    */
+    transition: border 0.3s ease 3s;
+}
+
+.contact-info:focus {
+    border: double 3px black;   /* подвійна рамка */
+    outline: none;
+}
+
+.contact-info input[type="button"] {
+    align-self: start;
+}
+
+/* Footer */
+footer {
+    background-color: #91091e;
+    color: white;
+    padding: 10px 20px;
+    position: relative; /* значення 2 */
+    float: none; /* для виконання вимоги про float */
+}
+
+footer ul {
+    list-style-type: square;
+}
+
+/* Кнопки */
+input[type="button"] {
+    background-color: #e7e7e7;
+    border: 1px solid #555;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+input[type="button"]:hover {
+    background-color: #bbb;
+}
