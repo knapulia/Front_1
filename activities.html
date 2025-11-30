@@ -30,40 +30,75 @@
         <li>Безпека громади</li>
     </ol>
 
-    <center>
-        <h3>Освіта</h3>
-        <img src="images/education.jpg" alt="Освіта" width="500">
-        <p>Відділ освіти Здолбунівської міської ради відповідає за освітні заклади громади та співпрацює з Міністерством освіти і науки України.</p>
-        <p class="special-text">зв’язок з державними органами влади</p>
+    <div class="carousel-container">
+        <img class="carousel-slide active" src="images/education.jpg" alt="Освіта">
+        <img class="carousel-slide" src="images/health.jpg" alt="Медицина">
+        <img class="carousel-slide" src="images/culture.jpg" alt="Культура">
+        <img class="carousel-slide" src="images/ecology.jpg" alt="Екологія">
+        <img class="carousel-slide" src="images/volunteer.jpg" alt="Волонтерство">
+        <img class="carousel-slide" src="images/economy.jpg" alt="Економіка">
+        <img class="carousel-slide" src="images/security.jpg" alt="Безпека">
+    </div>
+<center>
+    <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Пошук напряму за назвою...">
+    </div>
+</center>
+<center>
+    <h2>Детальна інформація</h2>
 
-        <h3>Охорона здоров’я</h3>
-        <img src="images/health.jpg" alt="Медицина" width="500">
-        <p>Відділ охорони здоров’я забезпечує взаємодію з Міністерством охорони здоров’я для покращення медичного обслуговування мешканців громади.</p>
+        <div id="directionsContainer">
+            
+            <div class="direction-list-item" id="education">
+                <h3>Освіта</h3>
+                <img src="images/education.jpg" alt="Освіта" width="500">
+                <p>Відділ освіти Здолбунівської міської ради відповідає за освітні заклади громади та співпрацює з Міністерством освіти і науки України.</p>
+                <p class="special-text">зв’язок з державними органами влади</p>
+            </div>
 
-        <h3>Культура</h3>
-        <img src="images/culture.jpg" alt="Культура" width="500">
-        <p>Відділ культури підтримує місцеві культурні заходи та співпрацює з Міністерством культури України.</p>
+            <div class="direction-list-item" id="medicine">
+                <h3>Охорона здоров’я</h3>
+                <img src="images/health.jpg" alt="Медицина" width="500">
+                <p>Відділ охорони здоров’я забезпечує взаємодію з Міністерством охорони здоров’я для покращення медичного обслуговування мешканців громади.</p>
+            </div>
 
-        <h3>Екологія</h3>
-        <img src="images/ecology.jpg" alt="Екологія" width="500">
-        <p>Відділ екології займається питаннями охорони навколишнього середовища та реалізацією екологічних програм громади.</p>
+            <div class="direction-list-item" id="culture">
+                <h3>Культура</h3>
+                <img src="images/culture.jpg" alt="Культура" width="500">
+                <p>Відділ культури підтримує місцеві культурні заходи та співпрацює з Міністерством культури України.</p>
+            </div>
 
-        <h3>Волонтерство та громадська участь</h3>
-        <img src="images/volunteer.jpg" alt="Волонтерство" width="500">
-        <p>Підтримка волонтерських ініціатив та взаємодія з громадськими організаціями для розвитку громади.</p>
+            <div class="direction-list-item" id="ecology">
+                <h3>Екологія</h3>
+                <img src="images/ecology.jpg" alt="Екологія" width="500">
+                <p>Відділ екології займається питаннями охорони навколишнього середовища та реалізацією екологічних програм громади.</p>
+            </div>
 
-        <h3>Економіка та бізнес</h3>
-        <img src="images/economy.jpg" alt="Економіка" width="500">
-        <p>Відділ економіки та підприємництва підтримує місцевий бізнес та реалізацію економічних програм громади.</p>
+            <div class="direction-list-item" id="volunteer">
+                <h3>Волонтерство та громадська участь</h3>
+                <img src="images/volunteer.jpg" alt="Волонтерство" width="500">
+                <p>Підтримка волонтерських ініціатив та взаємодія з громадськими організаціями для розвитку громади.</p>
+            </div>
 
-        <h3>Безпека громади</h3>
-        <img src="images/security.jpg" alt="Безпека" width="500">
-        <p>Відділ безпеки забезпечує координацію дій із правоохоронними органами та захист прав громадян.</p>
+            <div class="direction-list-item" id="economy">
+                <h3>Економіка та бізнес</h3>
+                <img src="images/economy.jpg" alt="Економіка" width="500">
+                <p>Відділ економіки та підприємництва підтримує місцевий бізнес та реалізацію економічних програм громади.</p>
+            </div>
+
+            <div class="direction-list-item" id="security">
+                <h3>Безпека громади</h3>
+                <img src="images/security.jpg" alt="Безпека" width="500">
+                <p>Відділ безпеки забезпечує координацію дій із правоохоронними органами та захист прав громадян.</p>
+            </div>
+        </div>
 
         <br>
         <a href="main.html?from=activities">Повернутись на головну</a>
     </center>
 </main>
 
+<script src="lab4.js"></script>
 </body>
 </html>

@@ -1,16 +1,14 @@
-/* === Сторінка Напрями діяльності === */
 body.activities-page {
     font-family: Verdana, sans-serif;
     margin: 0;
     background-color: #fdfdfd;
 }
 
-/* Хедер фіксований зверху */
 header h1 {
-    background-color: rgb(145, 9, 30); /* колір за RGB */
-    color: white; /* колір за іменем */
+    background-color: rgb(145, 9, 30);
+    color: white; 
     padding: 15px;
-    position: fixed; /* значення 1 */
+    position: fixed; 
     top: 0;
     left: 0;
     width: 100%;
@@ -18,16 +16,14 @@ header h1 {
     z-index: 1000;
 }
 
-/* Основний контент */
 main {
-    margin-top: 120px; /* щоб хедер не перекривав контент */
+    margin-top: 120px; 
     display: grid;
     grid-template-columns: 1fr;
     gap: 30px;
     justify-items: center;
 }
 
-/* Блоки напрямів діяльності */
 main h3 {
     border-left: 10px solid #640016; 
     border-top: 3px dotted #640016;
@@ -38,14 +34,12 @@ main h3 {
     background-color: #fff8f8;
 }
 
-/* Відокремлений текст */
 p.special-text {
     font-style: italic;
     font-weight: lighter;
     font-size: 0.9em;
 }
 
-/* Зображення з hover */
 img {
     transition: filter 0.3s;
 }
@@ -54,16 +48,80 @@ img:hover {
     filter: brightness(0.75);
 }
 
-/* Посилання: зелене спочатку, сіре після переходу */
 body.activities-page a:link {
-    color: darkgreen;   /* ще не відвідане */
+    color: darkgreen;   
     text-decoration: none;
 }
 
 body.activities-page a:visited {
-    color: gray;        /* вже відвідане */
+    color: gray;       
 }
 
 body.activities-page a:hover {
     text-decoration: underline;
+}
+
+/* === Карусель === */
+.carousel-container {
+    width: 100%;
+    height: 20vh; 
+    position: relative;
+    overflow: hidden;
+    background-color: #eee;
+    margin-bottom: 20px;
+    display: flex;   
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-slide {
+    display: none;
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    animation: fadeEffect 1s;
+}
+
+.carousel-slide.active {
+    display: block;
+}
+
+@keyframes fadeEffect {
+    from {opacity: 0.4}
+    to {opacity: 1}
+}
+
+.search-wrapper {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f4f7f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-icon {
+    font-size: 1.2em;
+}
+
+#searchInput {
+    padding: 8px;
+    width: 250px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+.hidden-item {
+    display: none !important;
+}
+
+.direction-list-item {
+    margin-bottom: 30px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+.direction-list-item {
+    scroll-margin-top: 140px;
 }

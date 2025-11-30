@@ -39,7 +39,7 @@ fieldset {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex-grow: 1; /* <-- ЗМІНА: Додано 'flex-grow' (вимога 5) */
+    flex-grow: 1;
 }
 
 input[type="submit"] {
@@ -60,4 +60,51 @@ input[type="reset"] {
 a {
     align-self: center;
     margin-top: 10px;
+}
+
+/* === Tooltip та Hover ефекти === */
+
+.textarea-highlight {
+    background-color: #f0f8ff !important;
+    border: 2px solid #0056b3 !important; 
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.tooltip-wrapper {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+}
+
+.tooltip-text {
+    visibility: hidden; 
+    width: 220px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    left: 105%;
+    top: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #333 transparent transparent;
+}
+
+.tooltip-visible {
+    visibility: visible;
+    opacity: 1;
 }

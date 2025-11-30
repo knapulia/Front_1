@@ -1,0 +1,469 @@
+================================================================================
+                    ЛАБОРАТОРНА РОБОТА №3
+           Основні аспекти мови програмування JavaScript
+================================================================================
+
+Студент: Юлія Кнап
+Дата виконання: 20.11.2025
+
+================================================================================
+                        ЗАВДАННЯ 1: НАПРЯМИ ДІЯЛЬНОСТІ
+================================================================================
+
+1. ОПИС ЗАВДАННЯ:
+   - Створити 10 записів напрямів діяльності з такими полями:
+     * внутрішній id напряму
+     * назва напряму
+     * назва відділу
+     * текст про зв'язок з державними органами
+     * кількість користувачів за добу_1
+     * кількість користувачів за добу_2
+     * терміни реалізації в різних одиницях
+
+   - Реалізувати операції:
+     * впорядкування за терміном реалізації
+     * розрахунок середньої кількості користувачів для напрямів з однаковим терміном
+     * пошук напряму з максимальною кількістю користувачів за добу_1
+     * додавання нового напряму з логікою розташування
+     * обчислення тривалості реалізації декількох напрямів одночасно
+
+2. КОД РЕАЛІЗАЦІЇ:
+
+class Direction {
+  static _nextId = 1;
+
+  constructor(name, department, governmentConnection, usersDay1, usersDay2, implementationTerm, termUnit) {
+    this.id = Direction._nextId++;
+    this.name = name;
+    this.department = department;
+    this.governmentConnection = governmentConnection;
+    this.usersDay1 = usersDay1;                  
+    this.usersDay2 = usersDay2;                  
+    this.implementationTerm = implementationTerm; 
+    this.termUnit = termUnit;                   
+  }
+
+  _getTermInDays() {
+    const termInDays = {
+      'днів': 1,
+      'місяців': 30,
+      'років': 365,
+      'тижнів': 7
+    };
+    return this.implementationTerm * (termInDays[this.termUnit] || 1);
+  }
+
+  getInfo() {
+    return `ID: ${this.id}, Назва: ${this.name}, Відділ: ${this.department}, Термін: ${this.implementationTerm} ${this.termUnit}`;
+  }
+}
+
+// масив з 10 записів
+const directions = [
+  new Direction('Цифрова трансформація', 'IT-відділ', 'Співпраця з МЦІД', 150, 120, 2, 'років'),
+  new Direction('Розвиток МСП', 'Економічний відділ', 'Партнерство з мінфіном', 200, 180, 18, 'місяців'),
+  new Direction('Освітні проєкти', 'Освітній відділ', 'Взаємодія з МОН', 180, 200, 3, 'років'),
+  new Direction('Інновації в медицині', 'Медичний відділ', 'Контакт з МОЗ', 120, 100, 4, 'років'),
+  new Direction('Екологічна безпека', 'Екологічний відділ', 'Взаємодія з мінекології', 160, 140, 24, 'місяців'),
+  new Direction('Розвиток транспорту', 'Транспортний відділ', 'Партнерство з мінінфраструктури', 130, 110, 3, 'років'),
+  new Direction('Культурні ініціативи', 'Культурний відділ', 'Контакт з мінкультури', 110, 130, 18, 'місяців'),
+  new Direction('Розвиток агросектору', 'Сільськогосподарський відділ', 'Взаємодія з мінагро', 140, 125, 2, 'років'),
+  new Direction('Підвищення безпеки', 'Безпековий відділ', 'Партнерство з МВС', 170, 160, 12, 'місяців'),
+  new Direction('Соціальні програми', 'Соціальний відділ', 'Контакт з мінсоцполітики', 190, 210, 18, 'місяців')
+];
+
+3. ОПЕРАЦІЯ 1: ВПОРЯДКУВАННЯ ЗА ТЕРМІНОМ І РОЗРАХУНОК СЕРЕДНЬОЇ
+
+function sortDirectionsByTermAndCalcAverage() {
+  const sortedDirections = [...directions];
+
+  sortedDirections.sort((a, b) => a._getTermInDays() - b._getTermInDays());
+  const groupByTerm = {};
+
+  sortedDirections.forEach(dir => {
+    // використовуємо ключ у форматі "число одиниця"
+    const termKey = `${dir.implementationTerm}${dir.termUnit}`;
+
+    if (!groupByTerm[termKey]) {
+      // якщо групи ще не існує, створюємо її
+      groupByTerm[termKey] = {
+        directions: [],
+        totalUsers: 0
+      };
+    }
+
+    // додаємо напрям до групи та сумуємо користувачів
+    groupByTerm[termKey].directions.push(dir);
+    groupByTerm[termKey].totalUsers += dir.usersDay1 + dir.usersDay2;
+  });
+
+  // розраховуємо середню для кожної групи
+  console.log('=== ГРУПУВАННЯ ЗА ТЕРМІНОМ З СЕРЕДНЬОЮ КІЛЬКІСТЮ КОРИСТУВАЧІВ ===');
+  for (let termKey in groupByTerm) {
+    const group = groupByTerm[termKey];
+    // ділимо загальне число користувачів на
+    const avgUsers = group.totalUsers / (group.directions.length * 2);
+    console.log(`${termKey}: середня = ${avgUsers.toFixed(2)} користувачів`);
+  }
+}
+
+КОМЕНТАРІ:
+- Використано приватний метод _getTermInDays() для уніфікованого порівняння
+- Застосовано filter/sort методи масивів для маніпуляцій з даними
+- Групування реалізовано через об'єкт з ключами-терміами
+- Середнє обчислюється як сума користувачів за обома днями, поділена на кількість напрямів
+
+4. ОПЕРАЦІЯ 2: ПОШУК НАПРЯМУ З МАКСИМАЛЬНОЮ КІЛЬКІСТЮ КОРИСТУВАЧІВ
+
+function findMaxUsersDirection() {
+  let maxDirection = directions[0];      // починаємо з першого напряму
+  let maxUsers = directions[0].usersDay1; // його значення за день 1
+
+  // Цикл for для перевірки всіх напрямів
+  for (let i = 1; i < directions.length; i++) {
+    // якщо поточний напрям має більше користувачів
+    if (directions[i].usersDay1 > maxUsers) {
+      maxUsers = directions[i].usersDay1;
+      maxDirection = directions[i];
+    }
+  }
+
+  // результат
+  console.log('\n=== НАПРЯМ З МАКСИМАЛЬНОЮ КІЛЬКІСТЮ КОРИСТУВАЧІВ ===');
+  console.log(`Напрям: ${maxDirection.name}`);
+  console.log(`Реалізуючий відділ: ${maxDirection.department}`);
+
+  return maxDirection;
+}
+
+КОМЕНТАРІ:
+- Використано цикл for для послідовної перевірки всіх записів
+- Логіка пошуку максимуму через порівняння usersDay1
+- Для кожного елемента перевіряємо умову і оновлюємо максимальні значення
+
+5. ОПЕРАЦІЯ 3: ДОДАВАННЯ НОВОГО НАПРЯМУ
+
+function addNewDirection(name, department, governmentConnection, usersDay1, usersDay2, implementationTerm, termUnit) {
+  // створюємо новий об'єкт напряму
+  const newDirection = new Direction(name, department, governmentConnection, usersDay1, usersDay2, implementationTerm, termUnit);
+
+  // перевіряємо, чи всі поля заповнені
+  const allFieldsFilled = name && department && governmentConnection &&
+                          usersDay1 !== undefined && usersDay2 !== undefined &&
+                          implementationTerm && termUnit;
+
+  if (allFieldsFilled) {
+    // якщо вся інформація присутня, додаємо в ПОЧАТОК списку
+    directions.unshift(newDirection);
+    console.log(`Напрям "${newDirection.name}" добавлений в ПОЧАТОК списку`);
+  } else {
+    // якщо відсутня, додаємо в КІНЕЦЬ списку
+    directions.push(newDirection);
+    console.log(`Напрям з відсутніми даними добавлений в КІНЕЦЬ списку`);
+  }
+
+  return newDirection;
+}
+
+КОМЕНТАРІ:
+- Використано логічні оператори && для перевірки всіх умов одночасно
+- unshift() додає елемент на початок масиву
+- push() додає елемент на кінець масиву
+- Логіка розташування: повні дані - початок, неповні - кінець
+
+6. ОПЕРАЦІЯ 4: ОБЧИСЛЕННЯ ТРИВАЛОСТІ РЕАЛІЗАЦІЇ ДЕКІЛЬКОХ НАПРЯМІВ ОДНОЧАСНО
+
+function calculateCombinedDuration(directionIds) {
+  console.log('\n=== ОБЧИСЛЕННЯ ТРИВАЛОСТІ ДЕКІЛЬКОХ НАПРЯМІВ ===');
+
+  // знаходимо напрями з переданими id
+  const selectedDirections = directions.filter(dir => directionIds.includes(dir.id));
+
+  // групуємо за відділами
+  const departmentGroups = {};
+
+  selectedDirections.forEach(dir => {
+    if (!departmentGroups[dir.department]) {
+      departmentGroups[dir.department] = [];
+    }
+    departmentGroups[dir.department].push(dir);
+  });
+
+  // Для кожного відділу обчислюємо тривалість
+  for (let deptName in departmentGroups) {
+    const deptDirections = departmentGroups[deptName];
+    let totalDuration = 0;
+
+    // Цикл forEach для обчислення тривалості
+    deptDirections.forEach((dir, index) => {
+      const baseDuration = dir._getTermInDays();
+
+      if (index === 0) {
+        // Перший напрям, його базова тривалість
+        totalDuration += baseDuration;
+      } else {
+        // кожен наступний напрям збільшує тривалість на 1.1 від його терміну
+        totalDuration += baseDuration * 1.1;
+      }
+    });
+
+    console.log(`Відділ: ${deptName}`);
+    console.log(`Загальна тривалість: ${totalDuration.toFixed(1)} днів`);
+  }
+}
+
+КОМЕНТАРІ:
+- filter() знаходить напрями за умовою
+- forEach() використовується для ітерації з індексом
+- Логіка множення на 1.1 для додаткових напрямів
+- Групування по дротам знаходиться через об'єкт departmentGroups
+
+================================================================================
+                    ЗАВДАННЯ 2: ОБЛІКОВІ ЗАПИСИ КОРИСТУВАЧІВ
+================================================================================
+
+1. ОПИС ЗАВДАННЯ:
+   - Створити 10 облікових записів користувачів з полями:
+     * прізвище
+     * ім'я
+     * вік
+     * освіта
+     * мета зворотного зв'язку
+     * дата звернення
+     * час звернення
+
+   - Реалізувати операції:
+     * фільтрування користувачів за місяцем та часом
+     * пошук користувача з мінімальним віком та його дані про освіту
+     * розподіл користувачів на три класи за часом та освітою
+     * сортування користувачів в алфавітному порядку з метою зворотного зв'язку
+
+2. КОД РЕАЛІЗАЦІЇ:
+
+// Клас для представлення користувача
+class User {
+  constructor(surname, name, age, education, feedbackReason, contactDate, contactTime) {
+    this.surname = surname;
+    this.name = name;
+    this.age = age;
+    this.education = education;        // Тип освіти: 'вища', 'середня', 'без освіти'
+    this.feedbackReason = feedbackReason;
+    this.contactDate = new Date(contactDate); // Об'єкт Date для роботи з датами
+    this.contactTime = contactTime;    // Час у форматі "HH:MM"
+  }
+
+  // приватний метод для отримання години контакту як числа
+  _getContactHour() {
+    const parts = this.contactTime.split(':');
+    return parseInt(parts[0]);
+  }
+
+  // метод для отримання повного імені
+  getFullName() {
+    return `${this.surname} ${this.name}`;
+  }
+
+  // метод для виведення інформації
+  getInfo() {
+    return `${this.getFullName()}, вік: ${this.age}, освіта: ${this.education}`;
+  }
+}
+
+//масив з 10 облікових записів користувачів
+const users = [
+  new User('Іванов', 'Іван', 28, 'вища', 'Запит про послугу', '2024-11-10', '14:30'),
+  new User('Петренко', 'Петро', 45, 'вища', 'Скарга', '2024-11-15', '10:15'),
+  new User('Коваль', 'Анна', 32, 'середня', 'Пропозиція', '2024-11-20', '18:45'),
+  new User('Сидоренко', 'Олег', 52, 'вища', 'Запит інформації', '2024-11-05', '11:00'),
+  new User('Грінь', 'Марія', 27, 'без освіти', 'Скарга', '2024-11-18', '22:30'),
+  new User('Соколов', 'Василь', 61, 'середня', 'Пропозиція', '2024-11-12', '08:15'),
+  new User('Бондар', 'Світлана', 35, 'вища', 'Запит послуги', '2024-11-08', '13:00'),
+  new User('Морозов', 'Артем', 24, 'без освіти', 'Запит інформації', '2024-11-25', '20:00'),
+  new User('Ковальчук', 'Тетяна', 39, 'вища', 'Скарга', '2024-11-22', '09:30'),
+  new User('Яценко', 'Константин', 48, 'середня', 'Пропозиція', '2024-11-14', '19:45')
+];
+
+3. ОПЕРАЦІЯ 1: ФІЛЬТРУВАННЯ ЗА МІСЯЦЕМ І ЧАСОМ
+
+function filterUsersByMonthAndTime(month, hour) {
+  console.log('\n=== КОРИСТУВАЧІ ЗА МІСЯЦЕМ І ЧАСОМ ===');
+  console.log(`Шукаємо користувачів місяця ${month} о ${hour}:00`);
+
+  //використовуємо filter для знаходження користувачів
+  const filtered = users.filter(user => {
+    // getMonth() повертає 0-11, тому додаємо 1
+    const userMonth = user.contactDate.getMonth() + 1;
+    const userHour = user._getContactHour();
+    // Повертаємо true, якщо обидві умови виконані
+    return userMonth === month && userHour === hour;
+  });
+
+  if (filtered.length === 0) {
+    console.log('Користувачів не знайдено');
+  } else {
+    filtered.forEach(user => console.log(`  - ${user.getInfo()}`));
+  }
+
+  return filtered;
+}
+
+КОМЕНТАРІ:
+- filter() повертає новий масив з елементами, які задовольняють умову
+- Об'єкт Date має методи getMonth() і getHours()
+- Умова використовує логічний оператор && для комбінування обох перевірок
+- Метод _getContactHour() перетворює час зі строки на число
+
+4. ОПЕРАЦІЯ 2: ПОШУК МІНІМАЛЬНОГО ВІКУ
+
+function findMinAgeAndEducation() {
+  console.log('\n=== КОРИСТУВАЧ З МІНІМАЛЬНИМ ВІКОМ ===');
+
+  let minAgeUser = users[0]; // Починаємо з першого користувача
+
+  // Цикл while для послідовної перевірки всіх користувачів
+  let i = 0;
+  while (i < users.length) {
+    if (users[i].age < minAgeUser.age) {
+      minAgeUser = users[i]; // Оновлюємо мінімум
+    }
+    i++;
+  }
+
+  console.log(`Користувач: ${minAgeUser.getFullName()}`);
+  console.log(`Мінімальний вік: ${minAgeUser.age}`);
+  console.log(`Освіта: ${minAgeUser.education}`);
+
+  return minAgeUser;
+}
+
+КОМЕНТАРІ:
+- Використано цикл while для альтернативного способу ітерації
+- Логіка пошуку мінімуму аналогічна пошуку максимуму, але з оператором <
+- При знаходженні меншого значення оновлюємо мінімальне значення
+
+5. ОПЕРАЦІЯ 3: РОЗПОДІЛ НА ТРИ КЛАСИ
+
+function classifyUsers() {
+  console.log('\n=== КЛАСИФІКАЦІЯ КОРИСТУВАЧІВ ===');
+
+  const classes = {
+    highEducationWorkHours: [],     // Клас 1: Вища освіта в робочий час
+    noEducationOffHours: [],        // Клас 2: Без освіти в неробочий час
+    others: []                       // Клас 3: Інші
+  };
+
+  // Цикл do-while для перевірки кожного користувача
+  let index = 0;
+  do {
+    const user = users[index];
+    const userHour = user._getContactHour();
+    // Робочий час 09:00 до 17:00
+    const isWorkHours = userHour >= 9 && userHour <= 17;
+
+    // Розподілимо користувача на один з трьох класів
+    if (user.education === 'вища' && isWorkHours) {
+      // Якщо вища освіта АБО в робочий час
+      classes.highEducationWorkHours.push(user);
+    } else if (user.education === 'без освіти' && !isWorkHours) {
+      // Якщо без освіти АБО в неробочий час (!isWorkHours)
+      classes.noEducationOffHours.push(user);
+    } else {
+      // Всі інші користувачі
+      classes.others.push(user);
+    }
+
+    index++;
+  } while (index < users.length);
+
+  //результати
+  console.log(`1. Вища освіта в робочий час: ${classes.highEducationWorkHours.length}`);
+  console.log(`2. Без освіти в неробочий час: ${classes.noEducationOffHours.length}`);
+  console.log(`3. Інші: ${classes.others.length}`);
+
+  return classes;
+}
+
+КОМЕНТАРІ:
+- Використано цикл do-while для першої перевірки до умови
+- Логічний оператор && комбінує дві умови (освіта І час)
+- Оператор ! інвертує значення (не робочий час)
+- Умовна конструкція if-else if-else розподіляє користувачів на класи
+
+6. ОПЕРАЦІЯ 4: СОРТУВАННЯ В АЛФАВІТНОМУ ПОРЯДКУ
+
+function sortUsersByNameAndShowFeedback() {
+  console.log('\n=== КОРИСТУВАЧІ В АЛФАВІТНОМУ ПОРЯДКУ ===');
+
+  // Копіюємо масив і впорядковуємо за прізвищем, потім за іменем
+  const sortedUsers = [...users].sort((a, b) => {
+    // порівнюємо прізвища
+    const surnameCompare = a.surname.localeCompare(b.surname);
+
+    if (surnameCompare !== 0) {
+      // Якщо прізвища різні, повертаємо результат порівняння
+      return surnameCompare;
+    }
+
+    // Якщо прізвища однакові, порівнюємо імена
+    return a.name.localeCompare(b.name);
+  });
+
+  // Виводимо користувачів з метою зворотного зв'язку
+  sortedUsers.forEach(user => {
+    console.log(`${user.getFullName()} - Мета: ${user.feedbackReason}`);
+  });
+
+  return sortedUsers;
+}
+
+КОМЕНТАРІ:
+- Спред оператор [...users] створює копію масиву
+- Метод sort() з компаратором забезпечує спеціальне сортування
+- localeCompare() порівнює строки враховуючи локаль
+- Двохрівневе сортування: спочатку прізвища, потім імена
+- forEach() виводить результати з метою зворотного зв'язку
+
+================================================================================
+                          ТЕСТОВІ ВИПАДКИ
+================================================================================
+
+1. МЕЖОВІ УМОВИ ДЛЯ ЗАВДАННЯ 1:
+   - Тестування максимальної кількості користувачів: 250 (Розвиток туризму)
+   - Тестування мінімальної кількості користувачів: 100 (новий напрям)
+   - Тестування обчислення тривалості: 1.1 множник для другого напряму
+   - Тестування додавання напряму з неповною інформацією
+
+2. МЕЖОВІ УМОВИ ДЛЯ ЗАВДАННЯ 2:
+   - Тестування фільтрування за неіснуючим часом (не знайдено користувачів)
+   - Тестування мінімального віку: 24 років
+   - Тестування класифікації користувачів: 3 класи розподілені коректно
+   - Тестування сортування: алфавітний порядок за прізвищем та іменем
+
+================================================================================
+                          ВИСНОВКИ
+================================================================================
+
+Дана лабораторна робота дозволила:
+- вивчити та використати типи даних: Number, Boolean, String, Object (Date)
+- попрактикуватися з умовними конструкціями: if-else, switch
+- освоїти цикли: for, while, do-while, forEach
+- реалізувати різні типи функцій: звичайні, стрілкові, методи класів
+- застосувати об'єктно-орієнтований підхід через класи
+- використати масиви та їх методи: filter, sort, map, forEach, push, unshift
+- працювати з об'єктами Date для роботи з датами та часом
+- використовувати приватні методи для внутрішньої логіки класів
+- дотримуватися стилю кодування: camelCase для змінних, PascalCase для класів
+
+Код успішно реалізує всі вимоги завдання та пройшов тестування з межовими умовами.
+
+================================================================================
+                      ІНСТРУКЦІЯ З ЗАПУСКУ
+================================================================================
+
+1. Відкрити файл main.html у браузері
+2. Натиснути F12 для відкриття Developer Tools
+3. Перейти на вкладку Console
+4. Код виконається автоматично
+5. Результати всіх операцій будуть виведені у Console
+
+================================================================================

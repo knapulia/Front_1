@@ -50,7 +50,10 @@
         </label><br><br>
 
         <label><span><i>Детально:</i></span><br>
-            <textarea name="details" rows="5" cols="40" maxlength="300"></textarea>
+            <div class="tooltip-wrapper">
+                <textarea id="detailsField" name="details" rows="5" cols="40" maxlength="300"></textarea>
+                <span id="detailsTooltip" class="tooltip-text">Вдячні за Ваш час! Конкретизуйте мету звернення, будь ласка</span>
+            </div>
         </label><br><br>
 
         <label>
@@ -64,6 +67,8 @@
     <br>
     <a href="main.html">Повернутись на головну</a>
 </main>
+
+<script src="lab4.js"></script>
 
 </body>
 </html>
